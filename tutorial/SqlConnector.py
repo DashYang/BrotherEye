@@ -3,7 +3,8 @@
 
 import MySQLdb
 import traceback
-
+import ConfigParser
+import os
 _metaclass_ = type
 
 class SqlConnector:
@@ -14,6 +15,14 @@ class SqlConnector:
     db = None
 
     def __init__(self):
+        absolutepath =  os.path.split(os.path.realpath(__file__))[0]
+        config = ConfigParser.ConfigParser()
+        config.readfp(open('database.conf',"rb"))
+        self.url = config.get("global" , "url")
+        self.username = config.get("global" , "username")
+        self.password = config.get("global" , "password")
+        self.basename = config.get("global" , "basename")
+
         self.db = MySQLdb.connect(self.url , self.username , self.password , self.basename , charset = "utf8")
 
     def insertImage(self , title , content , url , md5 ,source):
@@ -63,7 +72,8 @@ class SqlConnector:
 
 
 
-#sqlconnector = SqlConnector()
+
+
 #sqlconnector.attachImageTag("3CAE0392B63FACCD9EB30F24DD" , "蝙蝠侠" , 1)
 #resultset = sqlconnector.getImageMD5()
 #for md5 in resultset:

@@ -22,11 +22,12 @@ class BaiduSpider(Spider):
 
     def collect_img(self , response):
         sel = Selector(response)
-        units = sel.xpath('//div[@class="d_post_content j_d_post_content "]')
+        units = sel.xpath('//div[@class="d_post_content j_d_post_content  "]')
         webtitle = sel.xpath('//h1[@class]/text()').extract()[0]
         mm = MatchManage()
         title_appeartable = mm.getNameAppearTime(webtitle);
         source_url = get_base_url(response)
+        print "帖子数目 %d" % len(units)
         for unit in units:
             img = unit.xpath('img[@class="BDE_Image"]/@src').extract()
             description = unit.xpath('text()').extract()
@@ -40,6 +41,7 @@ class BaiduSpider(Spider):
                     unit_appeartable[name] = content_appeartable[name]
                 else:
                     unit_appeartable[name] = 3 * unit_appeartable[name] + content_appeartable[name]
+
             if(img != None and len(img) > 0 and unit_appeartable != None and len(unit_appeartable) > 0):
                 print "title: " + webtitle
                 print 'content: '
@@ -65,19 +67,22 @@ class BaiduSpider(Spider):
 
 
     def parse(self , response):
+        print 'spider begin to crawl'
         sel = Selector(response)
         webtitle = sel.xpath('//head/title/text()').extract()
-        entries = sel.xpath('//div[@class="threadlist_text threadlist_title j_th_tit  notStarList "]')
+        entries = sel.xpath('//div[@class="threadlist_text threadlist_title j_th_tit  "]')
  #      print "webtitle:%s " % webtitle[0]
         cnt = 1;
         base_url = get_base_url(response)
         sqlconnector = SqlConnector()
         self.md5_set = sqlconnector.getImageMD5()
+        print webtitle[0]
+        print "entry length %s" % len(entries)
         for entry in entries:
             title = entry.xpath('a/text()').extract()[0]
             link = entry.xpath('a/@href').extract()[0]
-            #if(title != ['']):
-                #print "%d title : %s \nlink : %s \n" % (cnt , title , link)
+            if(title != ['']):
+                print "%d title : %s \nlink : %s \n" % (cnt , title , link)
             cnt += 1
             nexturl = urljoin_rfc(base_url, link)
 #           print 'nexturlis: ' + nexturl
