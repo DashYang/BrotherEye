@@ -26,7 +26,7 @@ class MatchManage:
                 dic[name] = len(resultset)
         return dic
 
-mm = MatchManage()
+#mm = MatchManage()
 #teststring = "蝙蝠侠超人复仇者"
 #table = mm.getNameAppearTime(teststring)
 #print table
