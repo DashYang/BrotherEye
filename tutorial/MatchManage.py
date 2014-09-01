@@ -15,7 +15,7 @@ class MatchManage:
             for line in namefile:
                 self.nameset.append(line.strip('\n'))
         finally:
-                 namefile.close( )
+                namefile.close( )
 
     def getNameAppearTime(self , content):
         dic = {}

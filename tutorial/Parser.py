@@ -5,7 +5,6 @@ Created on 2014-8-20
 
 @author: dash
 '''
-import hashlib
 import json
 import re
 import time
@@ -13,7 +12,10 @@ import time
 from scrapy.selector import Selector
 from scrapy.utils.response import get_base_url
 from scrapy.utils.url import urljoin_rfc
-from tutorial.items import *
+from tutorial.items import CommentItem
+from tutorial.items import EntryItem
+from tutorial.items import MultiMediaItem
+from tutorial.items import ReplyItem
 from tutorial.DBconnector import MySqlConnector
 _metaclass_ = type
 
@@ -74,7 +76,7 @@ class HtmlParser:
             item['userid'] = userid
             item['title'] = title
             item['link'] = link
-            print item
+#             print item
             self.db.storageItem(item);
             
 #             print item
@@ -87,6 +89,8 @@ class HtmlParser:
         sel = Selector(response)
         commentdivs = sel.xpath("//div[contains(@class,'l_post')]")
         base_url = get_base_url(response)
+#         print base_url
+#         print "len %d" % len(commentdivs)
         for commentdiv in commentdivs:
 #             print commentdiv.extract();
             data = commentdiv.xpath("@data-field")
@@ -96,22 +100,23 @@ class HtmlParser:
                 json_author =  json_data['author']
             except Exception:
                 print 'this comment is an ad!'
-                return
+                continue
             
             item = CommentItem() 
-            item['belongto'] =  base_url[base_url.rindex('/')+1 :len(base_url)]
-            item['user_id'] = json_author['user_id']
-            item['user_name'] = json_author['user_name']
-            item['user_sex'] = json_author['user_sex']
-            item['level_id'] = json_author['level_id']
-            item['level_name'] = json_author['level_name']
-            item['bawu'] = json_author['bawu']
+            if '?' in base_url:
+                item['belongto'] =  base_url[base_url.rindex('/')+1:base_url.rindex('?')]
+            else:
+                item['belongto'] =  base_url[base_url.rindex('/')+1:len(base_url)]
+            item['user_id'] = json_author.get('user_id')
+            item['user_name'] = json_author.get('user_name')
+            item['user_sex'] = json_author.get('user_sex')
+            item['level_id'] = json_author.get('level_id')
+            item['level_name'] = json_author.get('level_name')
+            item['bawu'] = json_author.get('bawu')
             
-            item['post_id'] = json_content['post_id']     #primary key
-            item['open_type'] = json_content['open_type']
-            item['date'] = json_content['date']
-            
-#             print item
+            item['post_id'] = json_content.get('post_id')     #primary key
+            item['open_type'] = json_content.get('open_type')
+            item['date'] = json_content.get('date')
 
             
             commentdetaildiv = commentdiv.xpath("div[contains(@class,'d_post_content_main')]/div/cc/div[1]")
@@ -122,17 +127,17 @@ class HtmlParser:
                 content += line
             
             item['content'] = content    
-            print item
+#             print item
             self.db.storageItem(item);
             multimedias = commentdetaildiv.xpath("img[@class='BDE_Image']/@src")
             for multimedia in multimedias:
                 imgitem =  MultiMediaItem()
                 imgitem['belongto'] = item['post_id']
                 imgitem['url'] = multimedia.extract()
-                print imgitem
+#                 print imgitem
                 self.db.storageItem(imgitem);
             
-            self.parserReply(response.body)
+        self.parserReply(response.body)
             
     def parserReply(self , html):
         regex = r'commentList" : (.*?),    "isAdThread"'
@@ -150,11 +155,8 @@ class HtmlParser:
                         item['user_id'] = replydetail['user_id']
                         item['now_time'] = self.getRealTime(replydetail['now_time'])
                         item['belongto'] = post_id
-                        print item    
+#                         print item    
                         self.db.storageItem(item);
                         
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
-   timestamp = 1408549088
-   parser =HtmlParser()
-   print parser.getRealTime(timestamp)
+    pass

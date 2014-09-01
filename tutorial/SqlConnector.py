@@ -4,7 +4,6 @@
 import MySQLdb
 import traceback
 import ConfigParser
-import os
 _metaclass_ = type
 
 class SqlConnector:
@@ -15,7 +14,7 @@ class SqlConnector:
     db = None
 
     def __init__(self):
-        absolutepath =  os.path.split(os.path.realpath(__file__))[0]
+#         absolutepath =  os.path.split(os.path.realpath(__file__))[0]
         config = ConfigParser.ConfigParser()
         config.readfp(open('database.conf',"rb"))
         self.url = config.get("global" , "url")
@@ -31,7 +30,7 @@ class SqlConnector:
         try:
             cursor.execute(sql)
             self.db.commit()
-        except Exception,e:
+        except Exception:
             self.db.rollback()
             var = traceback.format_exc()
             print var
@@ -45,7 +44,7 @@ class SqlConnector:
         try:
             cursor.execute(sql)
             sqlresultset = cursor.fetchall()
-        except Exception,e:
+        except Exception:
             self.db.rollback()
             var = traceback.format_exc()
             print var
@@ -62,7 +61,7 @@ class SqlConnector:
         try:
             cursor.execute(sql)
             self.db.commit()
-        except Exception,e:
+        except Exception:
             self.db.rollback()
             var = traceback.format_exc()
             print var

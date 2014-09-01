@@ -8,8 +8,8 @@ from scrapy.selector import Selector
 from scrapy.utils.response import get_base_url
 from scrapy.utils.url import urljoin_rfc
 
-from tutorial.MatchManage import*
-from tutorial.SqlConnector import*
+from tutorial.MatchManage import MatchManage
+from tutorial.SqlConnector import SqlConnector
 
 class BaiduSpider(Spider):
     name = "justice_league"
@@ -25,7 +25,7 @@ class BaiduSpider(Spider):
         units = sel.xpath('//div[@class="d_post_content j_d_post_content  "]')
         webtitle = sel.xpath('//h1[@class]/text()').extract()[0]
         mm = MatchManage()
-        title_appeartable = mm.getNameAppearTime(webtitle);
+#         title_appeartable = mm.getNameAppearTime(webtitle);
         source_url = get_base_url(response)
         print "帖子数目 %d" % len(units)
         for unit in units:

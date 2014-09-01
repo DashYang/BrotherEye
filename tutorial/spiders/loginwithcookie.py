@@ -5,11 +5,9 @@ Created on 2014-8-18
 '''
 # -*- coding: utf-8 -*-
 
-import sys
 import os
 import time
 from scrapy.spider import Spider
-from scrapy.selector import Selector
 from scrapy.http.request import Request
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys

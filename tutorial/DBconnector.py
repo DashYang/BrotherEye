@@ -11,7 +11,11 @@ import traceback
 import ConfigParser
 import os
 
-from tutorial.items import *
+from tutorial.items import CommentItem
+from tutorial.items import EntryItem
+from tutorial.items import SiteItem
+from tutorial.items import MultiMediaItem
+from tutorial.items import ReplyItem
 
 _metaclass_ = type
 
@@ -42,7 +46,7 @@ class MySqlConnector:
         try:
             cursor.execute(sql)
             self.db.commit()
-        except Exception,e:
+        except Exception:
             self.db.rollback()
             var = traceback.format_exc()
             print var
@@ -58,25 +62,23 @@ class MySqlConnector:
         try:
             cursor.execute(sql ,(item['id'] , item['belongto'] ,item['reply'] , item['author'] , item['userid'] , item['title'] , item['link']))
             self.db.commit()
-        except Exception,e:
+        except Exception:
             self.db.rollback()
             var = traceback.format_exc()
-            print e
+            print var
         cursor.close()
 #         self.db.close()
      
         
     def  insertCommentItem(self , item):
         cursor = self.db.cursor()
-        sql = "INSERT INTO comment (`post_id`, `belongto` , `user_id` , `user_name` , `user_sex`, `level_id` , `level_name` , `bawu` , `open_type` , `date`) \
-         VALUES ( %s ,  %s  ,  %s  ,  %s , %s, %s,  %s , %s,  %s ,  %s  );"  #% \
-#             (item['post_id'] , item['belongto'] , item['user_id'] , item['user_name'] , item['user_sex'] , item['level_id'] ,  item['level_name'], item['bawu'] \
-#              , item['open_type'] , item['date'])
+        sql = "INSERT INTO comment (`post_id`, `belongto` , `user_id` , `user_name` , `user_sex`, `level_id` , `level_name` , `bawu` , `open_type` , `date`, `content`) \
+         VALUES ( %s ,  %s  ,  %s  ,  %s , %s, %s,  %s , %s,  %s ,  %s ,  %s  );"  #% \
         try:
             cursor.execute(sql , (item['post_id'] , item['belongto'] , item['user_id'] , item['user_name'] , item['user_sex'] , item['level_id'] ,  item['level_name'], item['bawu'] \
-             , item['open_type'] , item['date']))
+             , item['open_type'] , item['date'] , item['content']))
             self.db.commit()
-        except Exception,e:
+        except Exception:
             self.db.rollback()
             var = traceback.format_exc()
             print var
@@ -92,7 +94,7 @@ class MySqlConnector:
         try:
             cursor.execute(sql)
             self.db.commit()
-        except Exception,e:
+        except Exception:
             self.db.rollback()
             var = traceback.format_exc()
             print var
@@ -109,7 +111,7 @@ class MySqlConnector:
         try:
             cursor.execute(sql , (item['comment_id'] , item['belongto'] , item['content'] , item['user_id'], item['now_time']))
             self.db.commit()
-        except Exception,e:
+        except Exception:
             self.db.rollback()
             var = traceback.format_exc()
             print var
