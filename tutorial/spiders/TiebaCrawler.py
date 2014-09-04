@@ -35,8 +35,6 @@ class TiebaCrawler(Spider):
             siteitem['link'] = link
             db.storageItem(siteitem)
             self.start_urls.append(link)
-            
-        
     
     ## according to start_url to crawl tieba
     def start_requests(self):

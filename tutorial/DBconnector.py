@@ -16,6 +16,9 @@ from tutorial.items import EntryItem
 from tutorial.items import SiteItem
 from tutorial.items import MultiMediaItem
 from tutorial.items import ReplyItem
+from tutorial.useritems import UserInfo
+from tutorial.useritems import FavoriteTieba
+from tutorial.useritems import Tiezi
 
 _metaclass_ = type
 
@@ -117,7 +120,43 @@ class MySqlConnector:
             print var
         cursor.close()
 #         self.db.close() 
+    
+    def insertUserInfo(self , item):
+        cursor = self.db.cursor()
+        sql = "INSERT INTO userinfo (`username`, `sex` , `location` , `birthplace` , `fans`, `follows`, `portrait`) VALUES ( %s ,  %s  ,  %s  , %s  , %s , %s , %s );"  #%  \
+        try:
+            cursor.execute(sql , (item['username'] , item['sex'] , item['location'] , item['birthplace'], item['fans'] , item['follows'] , item['portrait']))
+            self.db.commit()
+        except Exception:
+            self.db.rollback()
+            var = traceback.format_exc()
+            print var
+        cursor.close()
         
+    def insertFavoriteTieba(self , item):
+        cursor = self.db.cursor()
+        sql = "INSERT INTO favoritetieba (`username`, `level` , `name` ) VALUES ( %s ,  %s  ,  %s );"  
+        try:
+            cursor.execute(sql , (item['username'] , item['level'] , item['name'] ))
+            self.db.commit()
+        except Exception:
+            self.db.rollback()
+            var = traceback.format_exc()
+            print var
+        cursor.close()
+        
+    def insertTiezi(self , item):
+        cursor = self.db.cursor()
+        sql = "INSERT INTO tiezi (`username`, `reply` , `url`, `comment`, `tieba` ) VALUES ( %s ,  %s  ,  %s , %s , %s );"  
+        try:
+            cursor.execute(sql , (item['username'] , item['reply'] , item['url'] , item['comment'] , item['tieba'] ))
+            self.db.commit()
+        except Exception:
+            self.db.rollback()
+            var = traceback.format_exc()
+            print var
+        cursor.close()        
+    
     def storageItem(self ,item): 
         if isinstance(item , SiteItem):
             self.insertSiteItem(item)
@@ -129,7 +168,13 @@ class MySqlConnector:
             self.insertMutiMediaItem(item)
         elif isinstance(item , ReplyItem):
             self.insertReplyitem(item)
-    
+        elif isinstance(item , UserInfo):
+            self.insertUserInfo(item)
+        elif isinstance(item , FavoriteTieba):
+            self.insertFavoriteTieba(item)
+        elif isinstance(item , Tiezi):
+            self.insertTiezi(item)
+
     def __del__(self):
         self.db.close()    
     

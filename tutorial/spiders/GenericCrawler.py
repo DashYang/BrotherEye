@@ -6,7 +6,7 @@ Created on 2014-9-1
 from scrapy.spider import Spider 
 from scrapy.http.request import Request
 from scrapy.selector import Selector
-from scrapy.utils.response import get_base_url
+# from scrapy.utils.response import get_base_url
 
 import json
 
@@ -20,7 +20,7 @@ class TestParser:
             try:
                 json_data = json.loads(data.extract()[0])
                 json_content = json_data['content']  
-                json_author =  json_data['author']
+#                 json_author =  json_data['author']
             except Exception:
                 print 'this comment is an ad!'
                 continue

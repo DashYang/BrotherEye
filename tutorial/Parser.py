@@ -159,4 +159,8 @@ class HtmlParser:
                         self.db.storageItem(item);
                         
 if __name__ == "__main__":
+    ts = 1409562088696
+    timeArray = time.localtime(ts)
+    otherStyleTime = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
+    print otherStyleTime
     pass
