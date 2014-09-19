@@ -26,7 +26,7 @@ class ReParser:
     def parser_userinfo(self , html , username):
         userinfo = UserInfo()
         userinfo['username'] = username
-        
+        print "username:" + username + "%s" % type(username)
         regex = r"<div class=info>(.*?)<\\/div>"
         userinfo['sex'] = self.reg_match(regex , html)[0]
         
@@ -67,8 +67,12 @@ class ReParser:
                 tiezi = Tiezi()
                 tiezi['username'] = username
                 tiezi["reply"] = reply
+                
+                print "reply:" + reply + ":%s" % type(username)
                 tiezi["url"] = url
+                
                 tiezi["comment"] = comment
+                print "comment:" + comment + ":%s"  % type(username)                
                 tiezi["tieba"] = tieba[0:len(tieba)-3] 
                 self.db.storageItem(tiezi)
             
