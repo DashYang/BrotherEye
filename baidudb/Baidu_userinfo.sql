@@ -8,7 +8,7 @@ CREATE TABLE `userinfo` (
   `birthplace` varchar(30) DEFAULT NULL,
   `fans` varchar(11) DEFAULT NULL,
   `follows` varchar(11) DEFAULT NULL,
-  `portrait` varchar(40) DEFAULT NULL,
+  `portrait` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

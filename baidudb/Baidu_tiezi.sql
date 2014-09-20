@@ -6,7 +6,7 @@ CREATE TABLE `tiezi` (
   `username` varchar(30) DEFAULT NULL,
   `reply` varchar(600) DEFAULT NULL,
   `url` varchar(200) DEFAULT NULL,
-  `comment` varchar(65) DEFAULT NULL,
+  `comment` varchar(1000) DEFAULT NULL,
   `tieba` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3221 DEFAULT CHARSET=utf8;
