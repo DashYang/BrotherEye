@@ -131,6 +131,8 @@ class MySqlConnector:
             self.db.rollback()
             var = traceback.format_exc()
             print var
+            print item['username']
+            print item['portrait']
         cursor.close()
         
     def insertFavoriteTieba(self , item):
@@ -143,6 +145,7 @@ class MySqlConnector:
             self.db.rollback()
             var = traceback.format_exc()
             print var
+            print item['username']
         cursor.close()
         
     def insertTiezi(self , item):
@@ -155,6 +158,8 @@ class MySqlConnector:
             self.db.rollback()
             var = traceback.format_exc()
             print var
+            print item['url']
+            print item['username']
         cursor.close()        
     
     def storageItem(self ,item): 
